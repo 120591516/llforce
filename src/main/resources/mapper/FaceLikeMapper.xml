@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.llvision.face.dao.mapper.FaceLikeMapper" >
+  <resultMap id="BaseResultMap" type="com.llvision.face.entity.FaceLike" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="face_recoed_id" property="faceRecoedId" jdbcType="INTEGER" />
+    <result column="compare_pic" property="comparePic" jdbcType="VARCHAR" />
+    <result column="similarity" property="similarity" jdbcType="DOUBLE" />
+    <result column="status" property="status" jdbcType="SMALLINT" />
+    <result column="person_id" property="personId" jdbcType="BIGINT" />
+    <result column="person_info" property="personInfo" jdbcType="VARCHAR" />
+    <result column="warning_type" property="warningType" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="SMALLINT" />
+  </resultMap>
+</mapper>

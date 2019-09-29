@@ -1,0 +1,11 @@
+server:
+  undertow:
+    accesslog:
+      enabled: true
+spring:
+  profiles:
+    active: dev
+  application:
+    name: face-sever
+  messages:
+    basename: i18n/messages

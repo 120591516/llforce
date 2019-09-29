@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.llvision.face.dao.mapper.SystemConfMapper" >
+  <resultMap id="BaseResultMap" type="com.llvision.face.entity.SystemConf" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sharpness" property="sharpness" jdbcType="INTEGER" />
+    <result column="angle" property="angle" jdbcType="INTEGER" />
+    <result column="similarity" property="similarity" jdbcType="INTEGER" />
+    <result column="collect_mode" property="collectMode" jdbcType="INTEGER" />
+    <result column="compare_mode" property="compareMode" jdbcType="INTEGER" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+    <result column="api_host" property="apiHost" jdbcType="VARCHAR" />
+    <result column="mqtt_host" property="mqttHost" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <update id="updateSystemConfig" parameterType="com.llvision.face.entity.SystemConf">
+    update system_conf
+    <set >
+      <if test="sharpness != null" >
+        sharpness = #{sharpness},
+      </if>
+      <if test="angle != null" >
+        angle = #{angle},
+      </if>
+      <if test="similarity != null" >
+        similarity = #{similarity},
+      </if>
+      <if test="collectMode != null" >
+        collect_mode = #{collectMode},
+      </if>
+      <if test="compareMode != null" >
+        compare_mode = #{compareMode},
+      </if>
+      <if test="appId != null" >
+        app_id = #{appId},
+      </if>
+      <if test="appSecret != null" >
+        app_secret = #{appSecret},
+      </if>
+      <if test="apiHost != null" >
+        api_host = #{apiHost},
+      </if>
+      <if test="mqttHost != null" >
+        mqtt_host = #{mqttHost},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+</mapper>

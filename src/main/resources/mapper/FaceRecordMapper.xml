@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.llvision.face.dao.mapper.FaceRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.llvision.face.entity.FaceRecord" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="compare_pic" property="comparePic" jdbcType="VARCHAR" />
+    <result column="similarity" property="similarity" jdbcType="DOUBLE" />
+    <result column="is_warning" property="isWarning" jdbcType="SMALLINT" />
+    <result column="person_id" property="personId" jdbcType="INTEGER" />
+    <result column="person_name" property="personName" jdbcType="VARCHAR" />
+    <result column="person_card" property="personCard" jdbcType="VARCHAR" />
+    <result column="warning_type" property="warningType" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="last_record_time" property="lastRecordTime" jdbcType="TIMESTAMP" />
+    <result column="is_del" property="isDel" jdbcType="SMALLINT" />
+    <result column="bg_image" property="bgImage" jdbcType="VARCHAR" />
+    <result column="pic_name" property="picName" jdbcType="VARCHAR" />
+    <result column="bg_name" property="bgName" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="bg_image_id" property="bgImageId" jdbcType="VARCHAR" />
+    <result column="app_record_id" property="appRecordId" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select id="selectInfo" resultMap="BaseResultMap">
+      select * from face_record
+      <where>
+        AND is_del = 0
+        <if test="appRecordId != null">
+          AND parent_id != 0
+          AND app_record_id = #{appRecordId}
+        </if>
+        <if test="recordId != null">
+          AND parent_id = 0
+          AND id = #{recordId}
+        </if>
+      </where>
+  </select>
+</mapper>

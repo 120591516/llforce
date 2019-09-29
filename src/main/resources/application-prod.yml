@@ -1,0 +1,117 @@
+
+server:
+  port: 8861
+  undertow:
+    accesslog:
+      enabled: true
+      buffered: true
+      directory: /app/logs/
+      file-date-format: .yyyy-MM-dd
+      pattern: common
+      prefix: access_log
+      rename-on-rotate: false
+      request-attributes-enabled: false
+      rotate: true
+      suffix: .log
+  tomcat:
+    accept-count: 300
+    max-http-post-size: 512MB
+    max-connections: 200
+  application:
+    name: face-sever
+  messages:
+    basename: i18n/messages
+logging:
+  file: /app/logs/face.log
+  level:
+    com.llvision.face: DEBUG
+    org.springframework.web: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{TRACE_LOG_ID}] [%thread] %-5level %logger{36} %line - %msg%n'
+spring:
+  datasource:
+    name: system
+    #arise正式环境
+    url: jdbc:mysql://172.17.247.138:3306/face_server?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat,wall
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+
+  mqtt:
+    serverURIs: ws://mqtt.test.llvision.com  #mqtt连接地址
+    will:
+      topic: faceserver   # 断线后发布主题
+      payload: '{"command":"disconnect","server":"faceserver","appId":"appId"}'  # 发布内容
+      qos: 1   # qos 1
+      retained: true # 是否永久
+
+mapper:
+  mappers:
+    - com.llvision.face.base.BaseMapper
+  not-empty: false
+  identity: MYSQL
+pagehelper:
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+  helper-dialect: mysql
+
+# Mybatis配置
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+
+
+visit_url: http://123.56.22.39:48080
+feature_extract_url: http://120.79.25.118:8087/feature/v1/featureAcquire
+featureExtractUrl: http://faceservice.llvision.com:48013/api/v1/image/feature
+pic_url: http://faceservice.llvision.com:48888
+llvision:
+  ipAddress: http://faceservice.llvision.com:48013
+duplicateRemoval:
+  ipAddress: http://39.107.29.34:48014
+  flag: true
+similarityNum: 3
+flag: true
+customer: llvision00052
+file_path:
+
+#sftp上传
+sftp:
+  host: faceservice.llvision.com
+  username: llvision
+  password: llvision@16t
+  port: 40022
+  remotePath: upload
+
+#加密
+hasp_default_fid: 2000
+# 私有化部署使用4i  livision使用Az
+vendorCode: 4iBFM5hHMAVdRceVh7ws+43LkY56N5Lbz7zaalDxt7MPx7fDxD8o3d067/fjONUeB9JdIfiptuWBUOebY3fbS4XeHh5T98IOmUIqJ+TPJGlILHpXApzwknvTAoGWCEKnZdHJUlY/GeUSUctvgauLHjGEeAxxJ1hy5fWXVeEO1pOC/7akRHP/IX5qJTmkEnzqMTQXhircVuGS2fg8Ortr8sTRpSS5lC9P73wZ1MyD07v7Gxnqj8jILNvxfNfATKGHe0yer3MOLHUVy9ON44LxSaC9yCJnqDLELoasJnsQ3HTuNo1QV2L9Tr0izsxGtncsQPTtmOY5kmwoqRIjymsQtVGlARBelh/xHMrpjbxy3+ykE9h75No3xG21DzB/TIClFNfzcJmQJgbiCfTTfbfu+eNx6JGTcYMMINnANmjlGfZ+Y5amyJCxY6PLMmVX7Xv4DHrp9/7wDOlzOCtZ21mFSlzm5NZaotEBc6Z+/r7iXF34Wg408YpuRsFGzGlmtPrR5ywTSiQ2Ki8e2z6kXkfErt/yc8gBVf1An3icaD6P15211qdF+OMPJZMCVQgahEwGc3IVREcoiWXNKIm4u9bNRssDzfumWLSzLaNxHCBTrESP15YOC+V8lrp6xXM0U6fsIROpBFk0CEuIjDD40e9hAI9kxTNGLgaimLFT2z9Y+WyzjBRyIBtl8OeF6fGZsQD3Z1dma3+0QcZpx6QLf487EVMZMoNWrweN6BbuZyAuyjcNfGGyxoIVTZWAWV3WJ0k+DK1ngHC6H2Ycujltiuic8k14+naOzu/ixXSSrc+yHvMBBhlkxlY13VjZxLfSAnXsCJd+YtUHKlhzJ/GbK4oUTOJe5TwjtQjM7ujSqfEIDna6GDdIM3mD6zD2R/pO72sQk8BorsgRCc8s0gkFZYZdr7z9yXnmrQw4umsNwytavk3pxoR0HCgqPDH3znkyVGNzGVHAhieQo60ItaIGoRAtpg==
+#vendorCode: AzIceaqfA1hX5wS+M8cGnYh5ceevUnOZIzJBbXFD6dgf3tBkb9cvUF/Tkd/iKu2fsg9wAysYKw7RMAsVvIp4KcXle/v1RaXrLVnNBJ2H2DmrbUMOZbQUFXe698qmJsqNpLXRA367xpZ54i8kC5DTXwDhfxWTOZrBrh5sRKHcoVLumztIQjgWh37AzmSd1bLOfUGI0xjAL9zJWO3fRaeB0NS2KlmoKaVT5Y04zZEc06waU2r6AU2Dc4uipJqJmObqKM+tfNKAS0rZr5IudRiC7pUwnmtaHRe5fgSI8M7yvypvm+13Wm4Gwd4VnYiZvSxf8ImN3ZOG9wEzfyMIlH2+rKPUVHI+igsqla0Wd9m7ZUR9vFotj1uYV0OzG7hX0+huN2E/IdgLDjbiapj1e2fKHrMmGFaIvI6xzzJIQJF9GiRZ7+0jNFLKSyzX/K3JAyFrIPObfwM+y+zAgE1sWcZ1YnuBhICyRHBhaJDKIZL8MywrEfB2yF+R3k9wFG1oN48gSLyfrfEKuB/qgNp+BeTruWUk0AwRE9XVMUuRbjpxa4YA67SKunFEgFGgUfHBeHJTivvUl0u4Dki1UKAT973P+nXy2O0u239If/kRpNUVhMg8kpk7s8i6Arp7l/705/bLCx4kN5hHHSXIqkiG9tHdeNV8VYo5+72hgaCx3/uVoVLmtvxbOIvo120uTJbuLVTvT8KtsOlb3DxwUrwLzaEMoAQAFk6Q9bNipHxfkRQER4kR7IYTMzSoW5mxh3H9O8Ge5BqVeYMEW36q9wnOYfxOLNw6yQMf8f9sJN4KhZty02xm707S7VEfJJ1KNq7b5pP/3RjE0IKtB2gE6vAPRvRLzEohu0m7q1aUp8wAvSiqjZy7FLaTtLEApXYvLvz6PEJdj4TegCZugj7c8bIOEqLXmloZ6EgVnjQ7/ttys7VFITB3mazzFiyQuKf4J6+b/a/Y
+
+path:
+  resourcePath: /usr/local/
+# 回归测试后修改bug和功能修改需要更新api版本号
+faceService:
+  api:
+    version: 1.1.0.002
+    desc: 1.初始化appId默认配置
+
+

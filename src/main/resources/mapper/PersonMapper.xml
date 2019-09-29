@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.llvision.face.dao.mapper.PersonMapper" >
+  <resultMap id="BaseResultMap" type="com.llvision.face.entity.Person" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="pic" property="pic" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="card" property="card" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="SMALLINT" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="nation" property="nation" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="warning_type" property="warningType" jdbcType="CHAR" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="is_warning" property="isWarning" jdbcType="SMALLINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="INTEGER" />
+    <result column="is_del" property="isDel" jdbcType="SMALLINT" />
+    <result column="mark" property="mark" jdbcType="INTEGER" />
+    <result column="action" property="action" jdbcType="INTEGER" />
+    <result column="hash" property="hash" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, pic, `name`, card, sex, birthday, address, warning_type, `hash`, model,version,is_warning, create_time,
+    create_user, update_time, update_user,nation,mark,`action`
+  </sql>
+
+  <sql id="Base_Column_List_VO" >
+    p.id, p.pic, p.`name`, p.card, p.sex, p.birthday, p.address, p.warning_type, p.`hash`, p.model,p.version,p.is_warning, p.create_time,
+    p.create_user, p.update_time, p.update_user,p.nation,p.mark,p.`action`
+  </sql>
+
+
+  <select id="selectPersonValidByIdAndAppId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List_VO" />
+FROM
+	person p
+	LEFT JOIN warehouse_face wf ON p.id = wf.person_id
+	LEFT JOIN offline_face of ON wf.lib_id = of.id
+WHERE
+	p.id = #{id}
+    AND of.app_id = #{appId}
+	AND p.is_del != 1
+  </select>
+
+  <select id="getPersonByPersonAndWarehouseId" parameterType="com.llvision.face.entity.Person" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from person
+    <where>
+      AND id in(SELECT person_id FROM warehouse_face WHERE lib_id = #{warehouseId})
+      <if test="person.card !=null and person.card !=''">
+        and card=#{person.card}
+      </if>
+      <if test="person.name !=null and person.name !=''">
+        and `name`=#{person.name}
+      </if>
+      and is_del !=1
+    </where>
+    order by create_time desc
+  </select>
+    <select id="getPersonByPseron" resultType="com.llvision.face.entity.Person">
+
+    </select>
+
+</mapper>

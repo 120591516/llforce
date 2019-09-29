@@ -1,0 +1,115 @@
+
+server:
+  port: 48861
+  undertow:
+    accesslog:
+      enabled: true
+      buffered: true
+      directory: /app/logs/
+      file-date-format: .yyyy-MM-dd
+      pattern: common
+      prefix: access_log
+      rename-on-rotate: false
+      request-attributes-enabled: false
+      rotate: true
+      suffix: .log
+  tomcat:
+    accept-count: 300
+    max-http-post-size: 512MB
+    max-connections: 200
+  application:
+    name: face-sever
+  messages:
+    basename: i18n/messages
+logging:
+  file: /app/logs/face.log
+  level:
+    com.llvision.face: DEBUG
+    org.springframework.web: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{TRACE_LOG_ID}] [%thread] %-5level %logger{36} %line - %msg%n'
+spring:
+  datasource:
+    name: system
+    #arise正式环境
+    url: jdbc:mysql://123.56.22.39:43306/face_server?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat,wall
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    maxPoolPreparedStatementPerConnectionSize: 20
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+
+  mqtt:
+    serverURIs: ws://mqtt.test.llvision.com  #mqtt连接地址
+    will:
+      topic: faceserver   # 断线后发布主题
+      payload: '{"command":"disconnect","server":"faceserver","appId":"appId"}'  # 发布内容
+      qos: 1   # qos 1
+      retained: true # 是否永久
+
+mapper:
+  mappers:
+    - com.llvision.face.base.BaseMapper
+  not-empty: false
+  identity: MYSQL
+pagehelper:
+  reasonable: false
+  support-methods-arguments: true
+  params: count=countSql
+  helper-dialect: mysql
+
+# Mybatis配置
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+
+
+visit_url: http://123.56.22.39:48080
+feature_extract_url: http://120.79.25.118:8087/feature/v1/featureAcquire
+featureExtractUrl: http://39.96.62.131:48013/api/v1/image/feature
+pic_url: https://arise.test.llvision.com:48443
+llvision:
+  ipAddress: http://39.107.29.34:48013
+duplicateRemoval:
+  ipAddress: http://39.107.29.34:48014 
+  flag: true
+similarityNum: 3
+flag: true
+customer: llvision00052
+file_path:
+
+#sftp上传
+sftp:
+  host: arise.test.llvision.com
+  username: llvision
+  password: llvision@test
+  port: 40022
+  remotePath: upload
+#加密
+hasp_default_fid: 2000
+vendorCode: 4iBFM5hHMAVdRceVh7ws+43LkY56N5Lbz7zaalDxt7MPx7fDxD8o3d067/fjONUeB9JdIfiptuWBUOebY3fbS4XeHh5T98IOmUIqJ+TPJGlILHpXApzwknvTAoGWCEKnZdHJUlY/GeUSUctvgauLHjGEeAxxJ1hy5fWXVeEO1pOC/7akRHP/IX5qJTmkEnzqMTQXhircVuGS2fg8Ortr8sTRpSS5lC9P73wZ1MyD07v7Gxnqj8jILNvxfNfATKGHe0yer3MOLHUVy9ON44LxSaC9yCJnqDLELoasJnsQ3HTuNo1QV2L9Tr0izsxGtncsQPTtmOY5kmwoqRIjymsQtVGlARBelh/xHMrpjbxy3+ykE9h75No3xG21DzB/TIClFNfzcJmQJgbiCfTTfbfu+eNx6JGTcYMMINnANmjlGfZ+Y5amyJCxY6PLMmVX7Xv4DHrp9/7wDOlzOCtZ21mFSlzm5NZaotEBc6Z+/r7iXF34Wg408YpuRsFGzGlmtPrR5ywTSiQ2Ki8e2z6kXkfErt/yc8gBVf1An3icaD6P15211qdF+OMPJZMCVQgahEwGc3IVREcoiWXNKIm4u9bNRssDzfumWLSzLaNxHCBTrESP15YOC+V8lrp6xXM0U6fsIROpBFk0CEuIjDD40e9hAI9kxTNGLgaimLFT2z9Y+WyzjBRyIBtl8OeF6fGZsQD3Z1dma3+0QcZpx6QLf487EVMZMoNWrweN6BbuZyAuyjcNfGGyxoIVTZWAWV3WJ0k+DK1ngHC6H2Ycujltiuic8k14+naOzu/ixXSSrc+yHvMBBhlkxlY13VjZxLfSAnXsCJd+YtUHKlhzJ/GbK4oUTOJe5TwjtQjM7ujSqfEIDna6GDdIM3mD6zD2R/pO72sQk8BorsgRCc8s0gkFZYZdr7z9yXnmrQw4umsNwytavk3pxoR0HCgqPDH3znkyVGNzGVHAhieQo60ItaIGoRAtpg==
+
+path:
+  resourcePath: /usr/local/
+# 回归测试后修改bug和功能修改需要更新api版本号
+faceService:
+  api:
+    version: 1.1.0.002
+    desc: 1.初始化appId默认配置
